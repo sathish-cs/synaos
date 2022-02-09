@@ -1,0 +1,163 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: synaos
+spec: {}
+status: {}
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: synaos
+  namespace: synaos
+automountServiceAccountToken: false
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: backend
+  name: backend
+  namespace: synaos
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: backend
+    spec:
+      serviceAccountName: synaos
+      containers:
+      - image: nginx
+        name: nginx
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "800Mi"
+            cpu: "500m"
+
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: frontend
+  name: frontend
+  namespace: synaos
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: frontend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: frontend
+    spec:
+      serviceAccountName: synaos
+      containers:
+      - image: nginx
+        name: nginx
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: backend-svc
+  name: backend-svc
+  namespace: synaos
+spec:
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    app: backend
+  type: NodePort
+status:
+  loadBalancer: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: frontend-svc
+  name: frontend-svc
+  namespace: synaos
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: frontend
+  type: NodePort
+status:
+  loadBalancer: {}
+
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: null
+  name: backend
+  namespace: synaos
+spec:
+  maxReplicas: 10
+  minReplicas: 5
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend
+  targetCPUUtilizationPercentage: 10
+status:
+  currentReplicas: 0
+  desiredReplicas: 0
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: null
+  name: frontend
+  namespace: synaos
+spec:
+  maxReplicas: 10
+  minReplicas: 5
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontend
+  targetCPUUtilizationPercentage: 10
+status:
+  currentReplicas: 0
+  desiredReplicas: 0
+
