@@ -7,7 +7,7 @@ curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.11.1/kind-win
 chmod +x  ./kind-windows-amd64.exe 
 
 # Move file to PATH 
-mv ./kind-windows-amd64.exe ../../Downloads/kind
+mv ./kind-windows-amd64.exe c/windows
 
 # Create cluster using Kind
 
@@ -15,7 +15,7 @@ kind create cluster --config ./kind-config.yaml
 
 # Addons
 
-echo "Deploy metrics server to  monitor resource usage on cluster"
+echo "Deploy metrics server to  monitor resource usage on cluster" # Required for HPA
 
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.4.2/components.yaml
 
