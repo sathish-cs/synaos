@@ -1,11 +1,10 @@
+# Image 
 FROM node:16
 
 # Create app directory
 WORKDIR /usr/src/app
 
 # Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
 COPY package*.json ./
 
 RUN npm install
@@ -15,14 +14,23 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-#CMD [ "node", "server.js" ]
 
-
+# Image
 FROM node:16-slim
+
+# Create app directory
 WORKDIR /app
+
+# Copy code from previous build
 COPY --from=0 /usr/src/app ./
+
+# Create user and group
 RUN  useradd --user-group --system --create-home --no-log-init app
+
+# App port
 EXPOSE 8000
+
+# Run as user app
 USER app
 CMD [ "node", "server.js" ]
 
