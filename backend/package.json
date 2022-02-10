@@ -1,15 +1,13 @@
 {
-  "name": "sathish",
+  "name": "docker_web_app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Node.js on Docker",
+  "author": "First Last <first.last@example.com>",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "dependencies": {
-    "body-parser": "~1.15.2",
-    "express": "~4.14.0"
-  },
-  "author": "",
-  "license": "ISC"
+    "express": "^4.16.1"
+  }
 }
