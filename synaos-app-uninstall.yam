@@ -1,0 +1,9 @@
+### Remove namespace
+
+kubectl delete ns synaos # this will remove all objects inside namespace
+
+### Delete kubernetes cluster
+
+kind delete cluster --name clustername
+
+#### If the cluster name not specified, it will delete default cluster based on current context
