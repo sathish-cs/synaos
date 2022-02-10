@@ -9,4 +9,4 @@ Create k8s cluster using KIND to deploy sample application
 
 ### Deploy application into cluster
 
-kubectl -f synaos-app.yaml
+`kubectl -f synaos-app.yaml`
