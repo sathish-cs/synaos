@@ -1,3 +1,4 @@
+### Create new namespace
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -12,7 +13,7 @@ kind: ServiceAccount
 metadata:
   name: synaos
   namespace: synaos
-automountServiceAccountToken: false
+automountServiceAccountToken: false # By default token will be assigned to serviceaccount its only neccessary if our pods need to connect API
 
 ---
 apiVersion: apps/v1
@@ -34,11 +35,11 @@ spec:
       labels:
         app: backend
     spec:
-      serviceAccountName: synaos
+      serviceAccountName: synaos # Using custom service account instead default
       containers:
       - image: nginx
         name: nginx
-        resources:
+        resources: # By default there is no restrictions on pod resources, its recommended to set requests.
           requests:
             memory: "512Mi"
             cpu: "250m"
@@ -73,7 +74,7 @@ spec:
       containers:
       - image: nginx
         name: nginx
-        resources:
+        resources: # By default there is no restrictions on pod resources, its recommended to set requests.
           requests:
             memory: "256Mi"
             cpu: "250m"
@@ -124,6 +125,7 @@ status:
 
 
 ---
+### Configure HPA to scale pods automatically based on CPU utilization.
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -131,13 +133,13 @@ metadata:
   name: backend
   namespace: synaos
 spec:
-  maxReplicas: 10
+  maxReplicas: 10 # Maximum pods can be scaled
   minReplicas: 5
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: backend
-  targetCPUUtilizationPercentage: 10
+  targetCPUUtilizationPercentage: 10 # Define CPU utilization to spinup pod
 status:
   currentReplicas: 0
   desiredReplicas: 0
@@ -150,13 +152,13 @@ metadata:
   name: frontend
   namespace: synaos
 spec:
-  maxReplicas: 10
+  maxReplicas: 10 # Maximum pods can be scaled
   minReplicas: 5
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: frontend
-  targetCPUUtilizationPercentage: 10
+  targetCPUUtilizationPercentage: 10 # Define CPU utilization to spinup pod
 status:
   currentReplicas: 0
   desiredReplicas: 0
