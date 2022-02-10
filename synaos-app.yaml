@@ -89,9 +89,8 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: backend-svc
-  name: backend-svc
-  namespace: synaos
+    app: busy
+  name: backend
 spec:
   ports:
   - port: 8000
@@ -99,9 +98,10 @@ spec:
     targetPort: 8000
   selector:
     app: backend
-  type: NodePort
+  type: LoadBalancer
 status:
   loadBalancer: {}
+
 
 ---
 apiVersion: v1
@@ -109,8 +109,8 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: frontend-svc
-  name: frontend-svc
+    app: frontend
+  name: frontend
   namespace: synaos
 spec:
   ports:
@@ -119,7 +119,7 @@ spec:
     targetPort: 80
   selector:
     app: frontend
-  type: NodePort
+  type: LoadBalancer
 status:
   loadBalancer: {}
 
