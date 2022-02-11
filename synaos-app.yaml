@@ -37,8 +37,8 @@ spec:
     spec:
       serviceAccountName: synaos # Using custom service account instead default
       containers:
-      - image: nginx
-        name: nginx
+      - image: rocksathish/backend:v4
+        name: backend
         resources: # By default there is no restrictions on pod resources, its recommended to set requests.
           requests:
             memory: "512Mi"
@@ -89,7 +89,7 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: busy
+    app: backend
   name: backend
 spec:
   ports:
